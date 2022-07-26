@@ -55,4 +55,30 @@ public class BookItApiUtil {
         return "Bearer " + token;
     }
 
+    public static void deleteStudent(String studentEmail, String studentPassword){
+        //we need id of new student to delete as a teacher
+        //how to get id ?
+        //1.login api using new student email and password
+        //2.send get request to /api/users/me endpoint with new student token
+        //3.get the id of the student
+        //4.use that id for delete student as a teacher
+
+        // 1. send GET request to get token with student information
+        String studentToken = BookItApiUtil.generateToken(studentEmail, studentPassword);
+
+        // 2. send GET request to /api/users/me endpoint and get the id number
+        int idToDelete = given().accept(ContentType.JSON)
+                .and().header("Authorization", studentToken)
+                .when().get(ConfigurationReader.get("base_url") + "/api/users/me")
+                .then().statusCode(200).extract().jsonPath().getInt("id");
+
+        // 3. delete request as a teacher to /api/students/{id} endpoint to delete the student
+        String teacherToken = BookItApiUtil.generateToken(ConfigurationReader.get("teacher_email"), ConfigurationReader.get("teacher_password"));
+
+        given().pathParam("id", idToDelete)
+                .and().header("Authorization", teacherToken)
+                .when().delete(ConfigurationReader.get("base_url")+"/api/students/{id}")
+                .then().statusCode(204);
+    }
+
 }
