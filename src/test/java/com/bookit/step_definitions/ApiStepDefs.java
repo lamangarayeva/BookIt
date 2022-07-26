@@ -31,7 +31,6 @@ public class ApiStepDefs {
 
     @When("I get the current user information from api")
     public void i_get_the_current_user_information_from_api() {
-        System.out.println("token = " + token);
 
         // send GET request "/api/users/me" endpoint to get current user info
         response = given().accept(ContentType.JSON)
@@ -57,7 +56,7 @@ public class ApiStepDefs {
                 "where email = '"+emailGlobal+"'";
 
         Map<String, Object> dbMap = DBUtils.getRowMap(query);
-        System.out.println("dbMap = " + dbMap);
+        //System.out.println("dbMap = " + dbMap);
 
         String expectedFirstName = (String) dbMap.get("firstname");
         String expectedLastName = (String) dbMap.get("lastname");
