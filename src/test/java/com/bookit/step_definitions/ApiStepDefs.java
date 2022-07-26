@@ -4,6 +4,7 @@ import com.bookit.pages.SelfPage;
 import com.bookit.utilities.BookItApiUtil;
 import com.bookit.utilities.ConfigurationReader;
 import com.bookit.utilities.DBUtils;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,6 +24,7 @@ public class ApiStepDefs {
     String token;
     Response response;
     String emailGlobal;
+    Map<String, String> globalStudentInfo;
 
     @Given("I logged Bookit api using {string} and {string}")
     public void i_logged_Bookit_api_using_and(String email, String password) {
@@ -118,12 +120,45 @@ public class ApiStepDefs {
 
     @When("I send POST request to {string} endpoint with following information")
     public void i_send_post_request_to_end_point_with_following_information(String endPoint, Map<String, String> studentInfo) {
+
+        // why we prefer to get information as a map from feature file?
+        // bc we have queryParams method that takes map and pass to url as query key and value structure
+
         response = given().accept(ContentType.JSON)
                 .queryParams(studentInfo)
                 .header("Authorization", token)
                 .log().all()
-                .when().post(ConfigurationReader.get("base_url") + endPoint);
+                .when().post(ConfigurationReader.get("base_url") + endPoint)
+                .then().log().all().extract().response();
 
+        globalStudentInfo =  studentInfo;
     }
 
+    @And("I delete previously added student")
+    public void i_delete_previously_added_student() {
+        //we need id of new student to delete as a teacher
+        //how to get id ?
+        //1.login api using new student email and password
+        //2.send get request to /api/users/me endpoint with new student token
+        //3.get the id of the student
+        //4.use that id for delete student as a teacher
+
+        // 1. send GET request to get token with student information
+        String studentToken = BookItApiUtil.generateToken(globalStudentInfo.get("email"), globalStudentInfo.get("password"));
+
+        // 2. send GET request to /api/users/me endpoint and get the id number
+        int idToDelete = given().accept(ContentType.JSON)
+                .and().header("Authorization", studentToken)
+                .when().get(ConfigurationReader.get("base_url") + "/api/users/me")
+                .then().statusCode(200).extract().jsonPath().getInt("id");
+
+        // 3. delete request as a teacher to /api/students/{id} endpoint to delete the student
+        String teacherToken = BookItApiUtil.generateToken(ConfigurationReader.get("teacher_email"), ConfigurationReader.get("teacher_password"));
+
+        given().pathParam("id", idToDelete)
+                .and().header("Authorization", teacherToken)
+                .when().delete(ConfigurationReader.get("base_url")+"/api/students/{id}")
+                .then().statusCode(204);
+
+    }
 }
