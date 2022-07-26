@@ -20,7 +20,7 @@ Feature: User Verification
     When I get the current user information from api
     Then UI, API and Database user information must be match
 
-  @db @ui @wip
+  @db @ui
   Scenario Outline: three point verification (UI,API,Database)
     Given user logs in using "<email>" "<password>"
     And  user is on the my self page
