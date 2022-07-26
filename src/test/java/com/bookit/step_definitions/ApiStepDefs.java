@@ -26,6 +26,9 @@ public class ApiStepDefs {
     String emailGlobal;
     Map<String, String> globalStudentInfo;
 
+    //String studentEmail;
+    //String studentPassword;
+
     @Given("I logged Bookit api using {string} and {string}")
     public void i_logged_Bookit_api_using_and(String email, String password) {
 
@@ -132,6 +135,9 @@ public class ApiStepDefs {
                 .then().log().all().extract().response();
 
         globalStudentInfo =  studentInfo;
+
+        //studentEmail = studentInfo.get("email");
+        //studentPassword = studentInfo.get("password");
     }
 
     @And("I delete previously added student")
