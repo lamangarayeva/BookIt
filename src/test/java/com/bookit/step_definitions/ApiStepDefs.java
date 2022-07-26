@@ -38,6 +38,7 @@ public class ApiStepDefs {
     @Then("status code should be {int}")
     public void status_code_should_be(int statusCode) {
 
+        // no need to use Hamcrest Matchers, since cucumber framework and Junit assertions are used
         Assert.assertEquals(statusCode, response.statusCode());
 
     }
