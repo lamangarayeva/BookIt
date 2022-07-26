@@ -1,5 +1,6 @@
 package com.bookit.step_definitions;
 
+import com.bookit.pages.SelfPage;
 import com.bookit.utilities.BookItApiUtil;
 import com.bookit.utilities.ConfigurationReader;
 import com.bookit.utilities.DBUtils;
@@ -10,6 +11,7 @@ import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -72,6 +74,45 @@ public class ApiStepDefs {
         Assert.assertEquals(expectedFirstName, actualFirstName);
         Assert.assertEquals(expectedLastName, actualLastName);
         Assert.assertEquals(expectedRole, actualRole);
+
+    }
+
+    @Then("UI, API and Database user information must be match")
+    public void ui_API_and_Database_user_information_must_be_match() {
+
+        // get information from database
+        String query = "select firstname, lastname, role from users\n" +
+                "where email = '"+emailGlobal+"'";
+
+        Map<String, Object> dbMap = DBUtils.getRowMap(query);
+        //System.out.println("dbMap = " + dbMap);
+
+        String expectedFirstName = (String) dbMap.get("firstname");
+        String expectedLastName = (String) dbMap.get("lastname");
+        String expectedRole = (String) dbMap.get("role");
+
+        // get information from api
+        JsonPath jsonPath = response.jsonPath();
+        String actualFirstName = jsonPath.getString("firstName");
+        String actualLastName = jsonPath.getString("lastName");
+        String actualRole = jsonPath.getString("role");
+
+        // get information from ui
+        SelfPage selfPage = new SelfPage();
+        String actualUIName = selfPage.name.getText();
+        String actualUIRole = selfPage.role.getText();
+
+        // UI vs DB
+        String expectedFullName = expectedFirstName +" "+expectedLastName;
+        // verify ui fullName and db fullName
+        Assert.assertEquals(expectedFullName, actualUIName);
+        Assert.assertEquals(expectedRole, actualRole);
+
+        // UI vs API
+        String actualFullName = actualFirstName+" "+actualLastName;
+
+        Assert.assertEquals(actualFullName, actualUIName);
+        Assert.assertEquals(actualRole, actualUIRole);
 
     }
 
