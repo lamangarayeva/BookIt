@@ -116,4 +116,14 @@ public class ApiStepDefs {
 
     }
 
+    @When("I send POST request to {string} endpoint with following information")
+    public void i_send_post_request_to_end_point_with_following_information(String endPoint, Map<String, String> studentInfo) {
+        response = given().accept(ContentType.JSON)
+                .queryParams(studentInfo)
+                .header("Authorization", token)
+                .log().all()
+                .when().post(ConfigurationReader.get("base_url") + endPoint);
+
+    }
+
 }
