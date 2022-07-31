@@ -11,7 +11,7 @@ public class BookItApiUtil {
 
         Response response = given().accept(ContentType.JSON)
                 .queryParams("email", email, "password", password)
-                .when().get(ConfigurationReader.get("base_url") + "/sign");
+                .when().get(Environment.BASE_URL + "/sign");
 
         String token = response.path("accessToken");
 
@@ -28,18 +28,18 @@ public class BookItApiUtil {
         switch (role) {
 
             case "student-member":
-                email = ConfigurationReader.get("team_member_email");
-                password = ConfigurationReader.get("team_member_password");
+                email = Environment.MEMBER_EMAIL;
+                password = Environment.MEMBER_PASSWORD;
                 break;
 
             case "student-leader":
-                email = ConfigurationReader.get("team_leader_email");
-                password = ConfigurationReader.get("team_leader_password");
+                email = Environment.LEADER_EMAIL;
+                password = Environment.LEADER_PASSWORD;
                 break;
 
             case "teacher":
-                email = ConfigurationReader.get("teacher_email");
-                password = ConfigurationReader.get("teacher_password");
+                email = Environment.TEACHER_EMAIL;
+                password = Environment.TEACHER_PASSWORD;
                 break;
 
             default:
