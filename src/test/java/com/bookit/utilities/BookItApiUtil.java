@@ -46,13 +46,18 @@ public class BookItApiUtil {
                 throw new IllegalStateException("Unexpected value: " + role);
         }
 
-        response = given().accept(ContentType.JSON)
-                .queryParams("email", email, "password", password)
-                .get(Environment.BASE_URL + "/sign");
+        String accessToken =
+                given()
+                        .accept(ContentType.JSON)
+                        .queryParams("email",email,"password",password)
+                        .when()
+                        .get(Environment.BASE_URL+"/sign")
+                        .then()
+                        .statusCode(200)
+                        .extract().jsonPath().getString("accessToken");
 
-        String token = response.path("accessToken");
-
-        return "Bearer " + token;
+        System.out.println(role+":"+accessToken);
+        return "Bearer " + accessToken;
     }
 
     public static void deleteStudent(String studentEmail, String studentPassword){
