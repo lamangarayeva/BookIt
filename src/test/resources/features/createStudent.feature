@@ -15,9 +15,9 @@ Feature: Create student
     And I delete previously added student
 
 
-
-  #Scenario: test config
-   # Given I get env properties
+    @wip
+  Scenario: test config
+    Given I get env properties
 
 
   #Scenario: Create student a teacher and verify status code 201

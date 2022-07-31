@@ -48,7 +48,7 @@ public class BookItApiUtil {
 
         response = given().accept(ContentType.JSON)
                 .queryParams("email", email, "password", password)
-                .get(ConfigurationReader.get("base_url") + "/sign");
+                .get(Environment.BASE_URL + "/sign");
 
         String token = response.path("accessToken");
 
@@ -69,15 +69,15 @@ public class BookItApiUtil {
         // 2. send GET request to /api/users/me endpoint and get the id number
         int idToDelete = given().accept(ContentType.JSON)
                 .and().header("Authorization", studentToken)
-                .when().get(ConfigurationReader.get("base_url") + "/api/users/me")
+                .when().get(Environment.BASE_URL + "/api/users/me")
                 .then().statusCode(200).extract().jsonPath().getInt("id");
 
         // 3. delete request as a teacher to /api/students/{id} endpoint to delete the student
-        String teacherToken = BookItApiUtil.generateToken(ConfigurationReader.get("teacher_email"), ConfigurationReader.get("teacher_password"));
+        String teacherToken = BookItApiUtil.generateToken(Environment.TEACHER_EMAIL, Environment.TEACHER_PASSWORD);
 
         given().pathParam("id", idToDelete)
                 .and().header("Authorization", teacherToken)
-                .when().delete(ConfigurationReader.get("base_url")+"/api/students/{id}")
+                .when().delete(Environment.BASE_URL +"/api/students/{id}")
                 .then().statusCode(204);
     }
 

@@ -4,6 +4,7 @@ import com.bookit.pages.SelfPage;
 import com.bookit.utilities.BookItApiUtil;
 import com.bookit.utilities.ConfigurationReader;
 import com.bookit.utilities.DBUtils;
+import com.bookit.utilities.Environment;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -43,7 +44,7 @@ public class ApiStepDefs {
         response = given().accept(ContentType.JSON)
                 .and()
                 .header("Authorization", token)
-                .when().get(ConfigurationReader.get("base_url") + "/api/users/me");
+                .when().get(Environment.BASE_URL + "/api/users/me");
 
     }
 
@@ -131,7 +132,7 @@ public class ApiStepDefs {
                 .queryParams(studentInfo)
                 .header("Authorization", token)
                 .log().all()
-                .when().post(ConfigurationReader.get("base_url") + endPoint)
+                .when().post(Environment.BASE_URL + endPoint)
                 .then().log().all().extract().response();
 
         globalStudentInfo =  studentInfo;
