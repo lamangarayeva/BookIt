@@ -31,7 +31,7 @@ Feature: User Verification
     Examples:
       | email                   | password         |
       | wcanadinea@ihg.com      | waverleycanadine |
-      | dhughillb8@gov.uk       | celiefaltin      |
-      | nasgodbyb9@amazon.co.jp | jockodellenbach  |
-      | efieldenba@cbslocal.com | claudinebarnsley |
-      | mflethambd@163.com      | herschtrunks     |
+      #| dhughillb8@gov.uk       | celiefaltin      |
+      #| nasgodbyb9@amazon.co.jp | jockodellenbach  |
+      #| efieldenba@cbslocal.com | claudinebarnsley |
+      #| mflethambd@163.com      | herschtrunks     |
