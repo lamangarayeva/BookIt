@@ -147,4 +147,9 @@ public class ApiStepDefs {
         // we have created one method to delete student, you pass email and password of the student that you want to delete
         BookItApiUtil.deleteStudent(globalStudentInfo.get("email"), globalStudentInfo.get("password"));
     }
+
+    @Given("I logged Bookit api as {string}")
+    public void i_logged_bookit_api_as(String role) {
+        token = BookItApiUtil.getTokenByRole(role);
+    }
 }

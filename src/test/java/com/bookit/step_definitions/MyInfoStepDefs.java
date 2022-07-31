@@ -38,8 +38,8 @@ public class MyInfoStepDefs {
 		System.out.println("Environment.TEACHER_EMAIL = " + Environment.TEACHER_EMAIL);
 		System.out.println("Environment.TEACHER_PASSWORD = " + Environment.TEACHER_PASSWORD);
 
-		BookItApiUtil.getRole("teacher");
-		BookItApiUtil.getRole("student-member");
-		BookItApiUtil.getRole("student-leader");
+		BookItApiUtil.getTokenByRole("teacher");
+		BookItApiUtil.getTokenByRole("student-member");
+		BookItApiUtil.getTokenByRole("student-leader");
 	}
 }
